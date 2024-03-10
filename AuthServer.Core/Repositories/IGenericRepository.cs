@@ -16,7 +16,7 @@ namespace AuthServer.Core.Repositories
         IQueryable<TEntity> Where(Expression<Func<TEntity,bool>> predicate);
 
         Task AddAsync(TEntity entity); // memory'e bir data eklediğinden dolayı bir asenkron metodu vardır. daha sonra SaveChanges methodu çağırılarak memorydeki entityler kontrol edilir ve veri tabanına kaydedilir.
-        void Remove(int id); // entity'nin state'ini 'deleted' olarak işaretler bu yüzden asenkron metodu yok
+        void Remove(TEntity entity); // entity'nin state'ini 'deleted' olarak işaretler bu yüzden asenkron metodu yok
 
         TEntity Update(TEntity entity);
     }
