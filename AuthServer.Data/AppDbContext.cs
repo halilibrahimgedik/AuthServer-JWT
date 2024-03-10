@@ -20,6 +20,10 @@ namespace AuthServer.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
-
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            // IEntityTypeConfiguration'ı implement etmiş tüm sınıfları bulur ve ekler.
+            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
     }
 }
