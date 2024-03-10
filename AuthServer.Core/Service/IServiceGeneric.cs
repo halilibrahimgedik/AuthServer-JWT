@@ -14,11 +14,11 @@ namespace AuthServer.Core.Service
 
         Task<Response<IEnumerable<TDto>>> GetAllAsync();
 
-        Response<IEnumerable<TDto>> Where(Expression<Func<TEntity, bool>> predicate); //where, (product=>product.ıd>5) gibi
+        Task<Response<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> predicate); //where, (product=>product.ıd>5) gibi
 
-        Task<Response<TDto>> AddAsync(TEntity entity); // Db'de oluşturduğumuz entity'yi dto olarak geri dönderelim
+        Task<Response<TDto>> AddAsync(TDto entity); // Db'de oluşturduğumuz entity'yi dto olarak geri dönderelim
         Task<Response<NoDataDto>> Remove(int id); // artık void döndüremeyiz, bu yüzden geriye boş nesne gönderelim
 
-        Task<Response<NoDataDto>> Update(TEntity entity);
+        Task<Response<NoDataDto>> Update(TDto entity,int id);
     }
 }
