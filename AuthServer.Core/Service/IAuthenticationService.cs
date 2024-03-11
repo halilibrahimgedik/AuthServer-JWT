@@ -17,6 +17,6 @@ namespace AuthServer.Core.Service
         // kullanıcının refreshToken'ı kaldırmak için veya kullanıcı logout olduğunda refresh token'ı silmek için kullanabiliriz
         Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken);
 
-        Task<Response<ClientTokenDto>> CreateTokenByClient(ClientLoginDto clientLoginDto);
+        Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto);
     }
 }
