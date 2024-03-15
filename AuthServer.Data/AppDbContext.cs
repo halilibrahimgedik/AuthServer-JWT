@@ -24,6 +24,8 @@ namespace AuthServer.Data
         {
             // IEntityTypeConfiguration'ı implement etmiş tüm sınıfları bulur ve ekler.
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+            base.OnModelCreating(builder);
         }
     }
 }
