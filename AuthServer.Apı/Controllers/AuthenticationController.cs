@@ -7,10 +7,10 @@ namespace AuthServer.Apı.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AuthController : CustomBaseController
+    public class AuthenticationController : CustomBaseController
     {
         private readonly IAuthenticationService _authenticationService;
-        public AuthController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }

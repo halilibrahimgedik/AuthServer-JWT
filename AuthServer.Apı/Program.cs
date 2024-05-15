@@ -20,9 +20,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 // Options Pattern appSettingsJson dosyasýndaki belirli bir yapýlandýrmayý Class olarak atayýp daha sonra programda kullanmak istiyebiliriz.
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
+
 
 //! DI Register
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -30,7 +33,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IServiceGeneric<,>), typeof(ServiceGeneric<,>));
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -72,6 +74,8 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero, // Default olarak Jwt'ye 5 dk süre eklenir serverlar arasý zaman tutarsýzlýðýndan dolayý. Bu yüzden bunu 0'a çektik
     };
 });
+
+
 
 
 var app = builder.Build();

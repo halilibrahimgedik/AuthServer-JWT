@@ -10,11 +10,11 @@ namespace AuthServer.Apı.Controllers
     [Authorize(AuthenticationSchemes = ("Bearer"))]
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : CustomBaseController
+    public class ProductsController : CustomBaseController
     {
         private readonly IServiceGeneric<Product, ProductDto> _productService;
 
-        public ProductController(IServiceGeneric<Product, ProductDto> productService)
+        public ProductsController(IServiceGeneric<Product, ProductDto> productService)
         {
             _productService = productService;
         }
