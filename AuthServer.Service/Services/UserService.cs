@@ -19,7 +19,7 @@ namespace AuthServer.Service.Services
             _userManager = userManager;
         }
 
-        public async Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto)
+        public async Task<ResponseDto<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto)
         {
             var user = new UserApp
             {
@@ -33,19 +33,19 @@ namespace AuthServer.Service.Services
             {
                 var errors = result.Errors.Select(x => x.Description).ToList();
 
-                return Response<UserAppDto>.Fail(new ErrorDto(errors, true), 400);
+                return ResponseDto<UserAppDto>.Fail(new ErrorDto(errors, true), 400);
             }
 
-            return Response<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user),200);
+            return ResponseDto<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user),200);
         }
 
-        public async Task<Response<UserAppDto>> GetUserByUserNameAsync(string userName)
+        public async Task<ResponseDto<UserAppDto>> GetUserByUserNameAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
 
-            if(user == null) return Response<UserAppDto>.Fail("UserName not found",404,true);
+            if(user == null) return ResponseDto<UserAppDto>.Fail("UserName not found",404,true);
 
-            return Response<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user), 200);
+            return ResponseDto<UserAppDto>.Success(ObjectMapper.Mapper.Map<UserAppDto>(user), 200);
         }
     }
 }

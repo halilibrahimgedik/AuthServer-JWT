@@ -10,8 +10,8 @@ namespace AuthServer.Core.Service
 {
     public interface IUserService
     {
-        Task<Response<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto);
+        Task<ResponseDto<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto);
 
-        Task<Response<UserAppDto>> GetUserByUserNameAsync(string userName);
+        Task<ResponseDto<UserAppDto>> GetUserByUserNameAsync(string userName);
     }
 }

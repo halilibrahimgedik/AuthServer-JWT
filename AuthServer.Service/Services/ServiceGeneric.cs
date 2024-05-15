@@ -23,7 +23,7 @@ namespace AuthServer.Service.Services
         }
 
 
-        public async Task<Response<TDto>> AddAsync(TDto entity)
+        public async Task<ResponseDto<TDto>> AddAsync(TDto entity)
         {
             var newEntity = ObjectMapper.Mapper.Map<TEntity>(entity);
 
@@ -33,51 +33,51 @@ namespace AuthServer.Service.Services
 
             var newDto = ObjectMapper.Mapper.Map<TDto>(newEntity);
 
-            return Response<TDto>.Success(newDto, 200);
+            return ResponseDto<TDto>.Success(newDto, 200);
         }
 
-        public async Task<Response<IEnumerable<TDto>>> GetAllAsync()
+        public async Task<ResponseDto<IEnumerable<TDto>>> GetAllAsync()
         {
             var products = ObjectMapper.Mapper.Map<List<TDto>>(await _genericRepository.GetAllAsync());
 
-            return Response<IEnumerable<TDto>>.Success(products, 200);
+            return ResponseDto<IEnumerable<TDto>>.Success(products, 200);
         }
 
-        public async Task<Response<TDto>> GetByIdAsync(int id)
+        public async Task<ResponseDto<TDto>> GetByIdAsync(int id)
         {
             var product = await _genericRepository.GetByIdAsync(id);
 
             if(product == null)
             {
-                return Response<TDto>.Fail("Id not found", 404, true);
+                return ResponseDto<TDto>.Fail("Id not found", 404, true);
             }
 
-            return Response<TDto>.Success(ObjectMapper.Mapper.Map<TDto>(product),200);
+            return ResponseDto<TDto>.Success(ObjectMapper.Mapper.Map<TDto>(product),200);
         }
 
-        public async Task<Response<NoDataDto>> Remove(int id)
+        public async Task<ResponseDto<NoDataDto>> Remove(int id)
         {
             var isExist = await _genericRepository.GetByIdAsync(id);
 
             if(isExist == null)
             {
-                return Response<NoDataDto>.Fail("Id not found", 404, true);
+                return ResponseDto<NoDataDto>.Fail("Id not found", 404, true);
             }
 
             _genericRepository.Remove(isExist);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Response<NoDataDto>.Success(204);
+            return ResponseDto<NoDataDto>.Success(204);
         }
 
-        public async Task<Response<NoDataDto>> Update(TDto entity, int id)
+        public async Task<ResponseDto<NoDataDto>> Update(TDto entity, int id)
         {
             var isExistEntity = await _genericRepository.GetByIdAsync(id);
 
             if (isExistEntity == null)
             {
-                return Response<NoDataDto>.Fail("Id not found", 404, true);
+                return ResponseDto<NoDataDto>.Fail("Id not found", 404, true);
             }
 
             var updateEntity = ObjectMapper.Mapper.Map<TEntity>(entity);
@@ -86,14 +86,14 @@ namespace AuthServer.Service.Services
 
             await _unitOfWork.SaveChangesAsync();
             // No content
-            return Response<NoDataDto>.Success(204);
+            return ResponseDto<NoDataDto>.Success(204);
         }
 
-        public async Task<Response<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> predicate)
+        public async Task<ResponseDto<IEnumerable<TDto>>> Where(Expression<Func<TEntity, bool>> predicate)
         {
             var list = _genericRepository.Where(predicate);
 
-            return Response<IEnumerable<TDto>>.Success(ObjectMapper.Mapper.Map<IEnumerable<TDto>>(await list.ToListAsync()),200);
+            return ResponseDto<IEnumerable<TDto>>.Success(ObjectMapper.Mapper.Map<IEnumerable<TDto>>(await list.ToListAsync()),200);
         }
     }
 }

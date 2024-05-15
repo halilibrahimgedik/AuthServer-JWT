@@ -10,13 +10,13 @@ namespace AuthServer.Core.Service
 {
     public interface IAuthenticationService
     {
-        Task<Response<TokenDto>> CreateTokenAsync(LoginDto loginDto);
+        Task<ResponseDto<TokenDto>> CreateTokenAsync(LoginDto loginDto);
 
-        Task<Response<TokenDto>> CreateTokenByRefreshToken(string refreshToken);
+        Task<ResponseDto<TokenDto>> CreateTokenByRefreshToken(string refreshToken);
 
         // kullanıcının refreshToken'ı kaldırmak için veya kullanıcı logout olduğunda refresh token'ı silmek için kullanabiliriz
-        Task<Response<NoDataDto>> RevokeRefreshToken(string refreshToken);
+        Task<ResponseDto<NoDataDto>> RevokeRefreshToken(string refreshToken);
 
-        Response<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto);
+        ResponseDto<ClientTokenDto> CreateTokenByClient(ClientLoginDto clientLoginDto);
     }
 }
