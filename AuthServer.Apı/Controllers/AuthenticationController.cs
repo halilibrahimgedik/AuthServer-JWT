@@ -2,6 +2,7 @@
 using AuthServer.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Exceptions;
 
 namespace AuthServer.Apı.Controllers
 {
@@ -13,6 +14,13 @@ namespace AuthServer.Apı.Controllers
         public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
+        }
+
+        // Test Hata Api endpoint
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> TestErrorEndpoint(int id)
+        {
+            throw new Exception("Test error , Test InternalServerError");
         }
 
         [HttpPost]
