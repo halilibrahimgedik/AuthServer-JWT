@@ -6,6 +6,8 @@ using AuthServer.Core.Service;
 using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Services;
+using AuthServer.Service.Validations;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+// Fluent Validation options
+builder.Services.AddFluentValidation(options =>
+{
+    options.RegisterValidatorsFromAssemblyContaining(typeof(CreateUserDtoValidator));
+    //options.RegisterValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
+});
 
 // Options Pattern appSettingsJson dosyasýndaki belirli bir yapýlandýrmayý Class olarak atayýp daha sonra programda kullanmak istiyebiliriz.
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
