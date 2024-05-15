@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Configuration;
+using SharedLibrary.Services;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,7 @@ builder.Services.AddSwaggerGen();
 
 // Options Pattern appSettingsJson dosyasýndaki belirli bir yapýlandýrmayý Class olarak atayýp daha sonra programda kullanmak istiyebiliriz.
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
-builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
+builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
 
 
 //! DI Register
@@ -53,6 +54,10 @@ builder.Services.AddIdentity<UserApp, IdentityRole>(options =>
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 
+
+//appsettings.json'daki TokenOption 'ý okur ve CustomTokenOption sýnýfýna mapler ve geri döndürür
+var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
+
 // Jwt validating settings
 builder.Services.AddAuthentication(options =>
 {
@@ -60,9 +65,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,opt =>
 {
-    //appsettings.json'daki TokenOption 'ý okur ve CustomTokenOption sýnýfýna mapler ve geri döndürür
-    var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>();
-
     // endpoint'imize gelen token da neyi kontrol etmek, doðrulamak istiyoruz ?
     opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
     {

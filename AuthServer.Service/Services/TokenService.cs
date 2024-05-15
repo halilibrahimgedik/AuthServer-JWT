@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary.Configuration;
+using SharedLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,8 +22,8 @@ namespace AuthServer.Service.Services
     {
         private readonly UserManager<UserApp> _userManager;
 
-        private readonly CustomTokenOption _tokenOption;
-        public TokenService(UserManager<UserApp> userManager, IOptions<CustomTokenOption> options)
+        private readonly CustomTokenOptions _tokenOption;
+        public TokenService(UserManager<UserApp> userManager, IOptions<CustomTokenOptions> options)
         {
             _userManager = userManager;
             _tokenOption = options.Value;

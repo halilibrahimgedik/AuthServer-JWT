@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Configuration
 {
-    public class CustomTokenOption
+    public class CustomTokenOptions
     {
         public List<String> Audience { get; set; }
 

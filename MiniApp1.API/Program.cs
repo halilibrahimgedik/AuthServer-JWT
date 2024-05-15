@@ -1,3 +1,7 @@
+using SharedLibrary.Configuration;
+using SharedLibrary.Extensions;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+// ! Options Pattern
+builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
+// obcet instance
+var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
+
+builder.Services.AddCustomTokenAuth(tokenOptions);
+
+
 
 var app = builder.Build();
 
