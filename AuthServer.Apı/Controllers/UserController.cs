@@ -23,7 +23,7 @@ namespace AuthServer.Apı.Controllers
             return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = ("Bearer"))]
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
