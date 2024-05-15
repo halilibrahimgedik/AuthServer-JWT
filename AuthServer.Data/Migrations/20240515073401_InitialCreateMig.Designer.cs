@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuthServer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240315123229_FixedUserAppCityfield")]
-    partial class FixedUserAppCityfield
+    [Migration("20240515073401_InitialCreateMig")]
+    partial class InitialCreateMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

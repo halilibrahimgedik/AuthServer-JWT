@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Configuration;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer("Server=GEDIKPC; Database=AuthServerDb; Integrated Security=true;");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"), options =>
+    {
+        options.MigrationsAssembly(Assembly.GetAssembly(typeof(AppDbContext)).FullName);
+    });
 });
 
 
