@@ -42,7 +42,7 @@ namespace AuthServer.Service.Services
             return Convert.ToBase64String(numberByte);
         }
 
-        private IEnumerable<Claim> GetClaim(UserApp user, List<String> audiences)
+        private IEnumerable<Claim> GetClaims(UserApp user, List<String> audiences)
         {
             //payload'a yükleyeceğimiz kritik olmayan veri her biri veri claim olarak ifade edilir
             var userClaims = new List<Claim>
@@ -61,16 +61,18 @@ namespace AuthServer.Service.Services
         }
 
 
-        private IEnumerable<Claim> GetClaimForClient(Client client)
+        private IEnumerable<Claim> GetClaimsForClient(Client client)
         {
-            var claims = new List<Claim>();
+            var claims = new List<Claim>()
+            {
+                // random guid değeri oluşturalım Token için - Best practise
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+                // bu token kimin için oluşturuluyor 
+                new Claim(JwtRegisteredClaimNames.Sub, client.Id),
+            };
+
             claims.AddRange(client.Audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
-
-            // random guid değeri oluşturalım Token için - Best practise
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString());
-
-            // bu token kimin için oluşturuluyor 
-            new Claim(JwtRegisteredClaimNames.Sub, client.Id);
 
             return claims;
         }
@@ -86,10 +88,10 @@ namespace AuthServer.Service.Services
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: _tokenOption.Issuer,
-                expires : accessTokenExpiration,
-                notBefore : DateTime.UtcNow,
-                claims : GetClaim(user,_tokenOption.Audience),
-                signingCredentials : signingCredentials
+                expires: accessTokenExpiration,
+                notBefore: DateTime.UtcNow,
+                claims: GetClaims(user, _tokenOption.Audience),
+                signingCredentials: signingCredentials
                 );
 
             var handler = new JwtSecurityTokenHandler();
@@ -119,7 +121,7 @@ namespace AuthServer.Service.Services
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
                 notBefore: DateTime.UtcNow,
-                claims: GetClaimForClient(client),
+                claims: GetClaimsForClient(client),
                 signingCredentials: signingCredentials
                 );
 
