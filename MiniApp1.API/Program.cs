@@ -12,12 +12,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// ! Options Pattern
+
+
+// ! Options Pattern 
 builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
 // obcet instance
 var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
 
+// Extension Method for Validating  AccessToken
 builder.Services.AddCustomTokenAuth(tokenOptions);
+
+
+
 
 
 
