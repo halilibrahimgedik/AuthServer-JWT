@@ -1,5 +1,7 @@
 ﻿using AuthServer.Core.Dtos;
 using AuthServer.Core.Entities;
+using AuthServer.Core.IUnitOfWork;
+using AuthServer.Core.Repositories;
 using AuthServer.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,11 +10,11 @@ using SharedLibrary.Exceptions;
 
 namespace AuthServer.Service.Services
 {
-    public class UserService : IUserService
+    public class UserService : ServiceGeneric<UserApp, UserAppDto>, IUserService
     {
         private readonly UserManager<UserApp> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(UserManager<UserApp> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(UserManager<UserApp> userManager, RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, IGenericRepository<UserApp> genericRepository) : base(unitOfWork, genericRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -81,7 +83,7 @@ namespace AuthServer.Service.Services
                 throw new AssigningRoleException($"Error Occured While Assignin a Role to {user}");
             }
 
-            return ResponseDto<NoDataDto>.Success(StatusCodes.Status201Created);
+            return ResponseDto<NoDataDto>.Success(StatusCodes.Status204NoContent);
         }
 
     }

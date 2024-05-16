@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.Apı.Controllers
 {
-    [Authorize(AuthenticationSchemes = ("Bearer"))]
+    [Authorize(AuthenticationSchemes = ("Bearer"), Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : CustomBaseController

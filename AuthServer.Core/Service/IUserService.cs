@@ -1,4 +1,5 @@
 ﻿using AuthServer.Core.Dtos;
+using AuthServer.Core.Entities;
 using SharedLibrary.Dto;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Service
 {
-    public interface IUserService
+    public interface IUserService : IServiceGeneric<UserApp, UserAppDto>
     {
         Task<ResponseDto<UserAppDto>> CreateUserAsync(CreateUserDto createUserDto);
 

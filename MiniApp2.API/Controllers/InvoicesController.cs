@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace MiniApp2.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = ("Bearer"))]
+    [Authorize(AuthenticationSchemes = ("Bearer"),Roles = "manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class InvoicesController : ControllerBase
@@ -14,7 +14,7 @@ namespace MiniApp2.API.Controllers
         [HttpGet]
         public IActionResult GetInvoices()
         {
-            var userName = HttpContext.User.Identity.Name; // bu name bize token'ın Claims'lerinden gelecek
+            var userName = HttpContext.User.Identity?.Name; // bu name bize token'ın Claims'lerinden gelecek
 
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier); // gelen Token'ın Claims'lerinden NameIdentifier ile gelen ID 'yi aldık
 
@@ -23,7 +23,7 @@ namespace MiniApp2.API.Controllers
 
             var jwtGuidIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti);
 
-            return Ok($"API Project Name: 'MiniApp2.API - Invoices'\n userId: {userIdClaim.Value} - userName: {userName}\n email: {userEmailClaim.Value} - JwtGuidId: {jwtGuidIdClaim.Value}");
+            return Ok($"API Project Name: 'MiniApp2.API - Invoices'\n userId: {userIdClaim?.Value} - userName: {userName}\n email: {userEmailClaim?.Value} - JwtGuidId: {jwtGuidIdClaim?.Value}");
         }
     }
 }
