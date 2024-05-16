@@ -52,16 +52,28 @@ namespace AuthServer.Service.Services
                 new Claim(ClaimTypes.Name,user.UserName),
 
                 // random guid değeri oluşturalım Token için - Best practise
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+
+
             };
 
             userClaims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 
-            // Role-Based Authorization için role bilgisini claims'lere ekleyelim (payload'a eklenecek)
+            // 1-) *** Role-Based Authorization *** için role bilgisini claims'lere ekleyelim (payload'a eklenecek)
             // Rolleri alalım
             var userRoles = await _userManager.GetRolesAsync(user);
             // userRoles listesindeki rolleri tek tek dolaşıp claimsListesine ekledik
             userClaims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+
+            // 2-) *** Claim-Based Authorization ***
+            /*new Claim("city",user.City) nullReferanceException almamak için user.City gini nullable bir alanın
+                                           kesinlikle dolu olduğundan emin olduktan sonra claim oluşturulmalıdır*/
+
+            if (!string.IsNullOrEmpty(user.City))
+            {
+                userClaims.Add(new Claim("city", user.City));
+            }
 
             return userClaims;
         }

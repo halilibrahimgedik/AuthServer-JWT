@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace MiniApp2.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = ("Bearer"),Roles = "manager")]
+    [Authorize(AuthenticationSchemes = ("Bearer"),Roles = "manager" , Policy = "IstanbulPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class InvoicesController : ControllerBase
