@@ -75,6 +75,15 @@ namespace AuthServer.Service.Services
                 userClaims.Add(new Claim("city", user.City));
             }
 
+            // 3-) *** Policy-Based Authorization ***
+            // Claim-Based Authorization ile aynıdır tek farkı token'dan gelen claim nesnesine göre
+            // - ek business kodları - çalıştırmaktır
+
+            if (user.BirthDate != null)
+            {
+                userClaims.Add(new Claim(ClaimTypes.DateOfBirth, user.BirthDate.Value.ToShortDateString()));
+            }
+
             return userClaims;
         }
 

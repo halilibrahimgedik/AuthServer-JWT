@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
+using MiniApp2.API.Requirements;
 using SharedLibrary.Configuration;
 using SharedLibrary.Extensions;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +41,18 @@ builder.Services.AddAuthorization(options =>
 });
 
 
+// *** Policy-Based Authorization ***
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AgePolicy", policy =>
+    {
+        policy.Requirements.Add(new BirthDateRequirement(18));
+    });
+});
+
+// bu servisi eklemeliyiz (zorunlu singleton olarak) | uygulama ayaða kalkarken IAuthorizationHandler
+// interface'den sadece bir nesne oluþsun ve bu örnek uygulama ayakta oldukça bu nesneyi kullansýn
+builder.Services.AddSingleton<IAuthorizationHandler,BirthDateRequirementHandler>();
 
 
 
