@@ -42,7 +42,7 @@ namespace AuthServer.Service.Services
             return Convert.ToBase64String(numberByte);
         }
 
-        private IEnumerable<Claim> GetClaims(UserApp user, List<String> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(UserApp user, List<String> audiences)
         {
             //payload'a yükleyeceğimiz kritik olmayan veri her biri veri claim olarak ifade edilir
             var userClaims = new List<Claim>
@@ -56,6 +56,12 @@ namespace AuthServer.Service.Services
             };
 
             userClaims.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+
+            // Role-Based Authorization için role bilgisini claims'lere ekleyelim (payload'a eklenecek)
+            // Rolleri alalım
+            var userRoles = await _userManager.GetRolesAsync(user);
+            // userRoles listesindeki rolleri tek tek dolaşıp claimsListesine ekledik
+            userClaims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
 
             return userClaims;
         }
@@ -77,7 +83,7 @@ namespace AuthServer.Service.Services
             return claims;
         }
 
-        public TokenDto CreateToken(UserApp user)
+        public async Task<TokenDto> CreateTokenAsync(UserApp user)
         {
             var accessTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.AccessTokenExpiration);
             var refreshTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.RefreshTokenExpiration);
@@ -90,7 +96,7 @@ namespace AuthServer.Service.Services
                 issuer: _tokenOption.Issuer,
                 expires: accessTokenExpiration,
                 notBefore: DateTime.UtcNow,
-                claims: GetClaims(user, _tokenOption.Audience),
+                claims: await GetClaims(user, _tokenOption.Audience),
                 signingCredentials: signingCredentials
                 );
 

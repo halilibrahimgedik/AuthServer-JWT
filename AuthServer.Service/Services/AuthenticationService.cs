@@ -45,7 +45,7 @@ namespace AuthServer.Service.Services
                 return ResponseDto<TokenDto>.Fail("Email or Password is wrong", 400, true);
             }
 
-            var token = _tokenService.CreateToken(user);
+            var token = await _tokenService.CreateTokenAsync(user);
 
             var userRefreshToken = await _userRefreshToken.Where(x => x.UserId == user.Id).SingleOrDefaultAsync();
 
@@ -94,7 +94,7 @@ namespace AuthServer.Service.Services
 
             if (user == null) return ResponseDto<TokenDto>.Fail("UserId not found", 404, true);
 
-            var token = _tokenService.CreateToken(user);
+            var token = await _tokenService.CreateTokenAsync(user);
 
             // eski refresh token bilgilerini yenisi ile güncelleyelim
             existRefreshToken.RefreshToken = token.RefreshToken;

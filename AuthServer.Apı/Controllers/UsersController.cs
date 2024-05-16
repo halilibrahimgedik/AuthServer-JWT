@@ -1,7 +1,6 @@
 ﻿using AuthServer.Core.Dtos;
 using AuthServer.Core.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthServer.Apı.Controllers
@@ -23,11 +22,24 @@ namespace AuthServer.Apı.Controllers
             return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
 
-        [Authorize(AuthenticationSchemes = ("Bearer"))]
+
+        [Authorize(AuthenticationSchemes = ("Bearer"))] // !!!
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
             return ActionResultInstance(await _userService.GetUserByUserNameAsync(HttpContext.User.Identity.Name));
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateRole(string? roleName)
+        {
+            return ActionResultInstance(await _userService.CreateRoleAsync(roleName!));
+        }
+
+        [HttpPost("AssignRole")]
+        public async Task<IActionResult> AssignRole(AssignRoleToUserDto dto)
+        {
+            return ActionResultInstance(await _userService.AssignRoleToUserAsync(dto));
         }
     }
 }

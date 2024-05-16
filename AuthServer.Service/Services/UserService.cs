@@ -48,7 +48,7 @@ namespace AuthServer.Service.Services
         }
 
 
-        public async Task<ResponseDto<NoDataDto>> CreateRole(string roleName)
+        public async Task<ResponseDto<NoDataDto>> CreateRoleAsync(string? roleName)
         {
             if (string.IsNullOrEmpty(roleName))
             {
@@ -65,7 +65,7 @@ namespace AuthServer.Service.Services
             return ResponseDto<NoDataDto>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ResponseDto<NoDataDto>> AssignRoleToUser(AssignRoleToUserDto dto)
+        public async Task<ResponseDto<NoDataDto>> AssignRoleToUserAsync(AssignRoleToUserDto dto)
         {
             var user = await _userManager.FindByIdAsync(dto.UserId);
 
